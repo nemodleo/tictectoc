@@ -2,6 +2,7 @@ from timeit import default_timer
 from datetime import timedelta
 from typing import Union
 
+
 class TicTecToc:
     MSG = '[TTT:{}] Elapsed time is'
     Temp_MSG = '[TTT:{}] Temp Elapsed time is'
@@ -20,6 +21,9 @@ class TicTecToc:
             }
         else: 
             self._timestamps[name]['start'] = default_timer()
+
+    def i(self,*args, **kwargs):
+        self.tic(*args, **kwargs)
 
     def tec(self, name: Union[str, int] = 'default', msg: str = None, tmp_msg: str = None, verbose: int = 0):
         '''End temp.'''
@@ -53,6 +57,9 @@ class TicTecToc:
             print(tmp_msg.format(name), timedelta(seconds=temp_elapsed))
 
         return temp_elapsed, elapsed
+    
+    def e(self,*args, **kwargs):
+        return self.tec(*args, **kwargs)
 
     def toc(self, name: Union[str, int] = "default", msg: str = None, verbose: int = 1):
         '''End.'''
@@ -72,6 +79,9 @@ class TicTecToc:
 
         return elapsed
 
+    def o(self,*args, **kwargs):
+        return self.toc(*args, **kwargs)
+
     def __enter__(self):
         self.start = default_timer()
     
@@ -80,3 +90,25 @@ class TicTecToc:
         self.end = default_timer()
         self.elapsed = self.end - self.start
         print(msg, timedelta(seconds=self.elapsed))
+
+
+# init
+ttt = TicTecToc()
+
+
+# global func with abbreviation
+tic = i = ttt.tic
+tec = e = ttt.tec
+toc = o = ttt.toc
+
+
+# decorator
+def tictectoc(argument):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            ttt.tic(argument)
+            result = func(*args, **kwargs)
+            ttt.toc(argument)
+            return result
+        return wrapper
+    return decorator
