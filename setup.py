@@ -3,7 +3,7 @@ import setuptools
 with open('README.md', 'r') as f:
     long_description = f.read()
 
-version = '0.1.4'
+version = '0.2.0'
 
 setuptools.setup(
     name='tictectoc',

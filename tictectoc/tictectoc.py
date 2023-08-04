@@ -1,6 +1,6 @@
 from timeit import default_timer
 from datetime import timedelta
-from typing import Union
+from typing import Union, Optional
 
 
 class TicTecToc:
@@ -8,11 +8,14 @@ class TicTecToc:
     Temp_MSG = '[TTT:{}] Temp Elapsed time is'
     _timestamps: dict = None
 
-    def __init__(self):
+    def __init__(self, name: Union[str, int] = 'default'):
         self._timestamps = dict()
+        self._name = name
 
-    def tic(self, name: Union[str, int] = 'default'):
+    def tic(self, name: Optional[Union[str, int]] = None):
         '''Start.'''
+        if name is None:
+            name = self._name
         name = str(name)
         if name not in self._timestamps:
             self._timestamps[name] = {
@@ -25,8 +28,10 @@ class TicTecToc:
     def i(self,*args, **kwargs):
         self.tic(*args, **kwargs)
 
-    def tec(self, name: Union[str, int] = 'default', msg: str = None, tmp_msg: str = None, verbose: int = 0):
+    def tec(self, name: Optional[Union[str, int]] = None, msg: str = None, tmp_msg: str = None, verbose: int = 0):
         '''End temp.'''
+        if name is None:
+            name = self._name
         name = str(name)
         if name not in self._timestamps:
             return None
@@ -61,8 +66,10 @@ class TicTecToc:
     def e(self,*args, **kwargs):
         return self.tec(*args, **kwargs)
 
-    def toc(self, name: Union[str, int] = "default", msg: str = None, verbose: int = 1):
+    def toc(self, name: Optional[Union[str, int]] = None, msg: str = None, verbose: int = 1):
         '''End.'''
+        if name is None:
+            name = self._name
         name = str(name)
         if name not in self._timestamps:
             return None
@@ -83,14 +90,12 @@ class TicTecToc:
         return self.toc(*args, **kwargs)
 
     def __enter__(self):
-        self.start = default_timer()
+        """Start the timer when using TicToc in a context manager."""
+        self.tic()
     
     def __exit__(self, *args):
-        msg = TicTecToc.MSG.replace(':{}','')
-        self.end = default_timer()
-        self.elapsed = self.end - self.start
-        print(msg, timedelta(seconds=self.elapsed))
-
+        """On exit, pring time elapsed since entering context manager."""
+        self.toc()
 
 # init
 ttt = TicTecToc()
@@ -112,3 +117,7 @@ def tictectoc(argument):
             return result
         return wrapper
     return decorator
+
+
+# @overload
+# def ttt(argument): ...
