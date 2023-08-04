@@ -1,5 +1,6 @@
 from timeit import default_timer
 from datetime import timedelta
+from typing import Union
 
 class TicTecToc:
     MSG = '[TTT:{}] Elapsed time is'
@@ -9,8 +10,9 @@ class TicTecToc:
     def __init__(self):
         self._timestamps = dict()
 
-    def tic(self, name: str = 'default'):
+    def tic(self, name: Union[str, int] = 'default'):
         '''Start.'''
+        name = str(name)
         if name not in self._timestamps:
             self._timestamps[name] = {
                 'start': default_timer(),
@@ -19,8 +21,9 @@ class TicTecToc:
         else: 
             self._timestamps[name]['start'] = default_timer()
 
-    def tec(self, name: str = 'default', msg: str = None, tmp_msg: str = None, verbose: int = 0):
+    def tec(self, name: Union[str, int] = 'default', msg: str = None, tmp_msg: str = None, verbose: int = 0):
         '''End temp.'''
+        name = str(name)
         if name not in self._timestamps:
             return None
         if self._timestamps[name] is None:
@@ -51,8 +54,9 @@ class TicTecToc:
 
         return temp_elapsed, elapsed
 
-    def toc(self, name: str = "default", msg: str = None, verbose: int = 1):
+    def toc(self, name: Union[str, int] = "default", msg: str = None, verbose: int = 1):
         '''End.'''
+        name = str(name)
         if name not in self._timestamps:
             return None
         if self._timestamps[name]['start'] is not None:
