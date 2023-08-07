@@ -117,11 +117,21 @@ o() # print '[TTT:default] Elapsed time is 0:00:10'
 6. decorator
 ```
 import time
-from tictectoc import tictectoc
-@tictectoc('timer0')
+from tictectoc import ttt
+@ttt.dec('timer0')
 def function(n=10):
     for i in range(n):
         time.sleep(1)
+function() # print '[TTT:timer0] Elapsed time is 0:00:10'
+```
+```
+import time
+from tictectoc import dec
+@dec('timer0')
+def function(n=1):
+    for i in range(n):
+        time.sleep(1)
+        
 function() # print '[TTT:timer0] Elapsed time is 0:00:10'
 ```
 

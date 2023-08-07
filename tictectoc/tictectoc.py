@@ -97,6 +97,19 @@ class TicTecToc:
         """On exit, pring time elapsed since entering context manager."""
         self.toc()
 
+    
+    # decorator
+    def dec(self, argument):
+        def decorator(func):
+            def wrapper(*args, **kwargs):
+                self.tic(argument)
+                result = func(*args, **kwargs)
+                self.toc(argument)
+                return result
+            return wrapper
+        return decorator
+    
+
 # init
 ttt = TicTecToc()
 
@@ -106,18 +119,6 @@ tic = i = ttt.tic
 tec = e = ttt.tec
 toc = o = ttt.toc
 
-
-# decorator
-def tictectoc(argument):
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            ttt.tic(argument)
-            result = func(*args, **kwargs)
-            ttt.toc(argument)
-            return result
-        return wrapper
-    return decorator
+dec = ttt.dec
 
 
-# @overload
-# def ttt(argument): ...
